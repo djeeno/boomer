@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/myzhan/boomer"
+	"github.com/djeeno/boomer"
 	"github.com/valyala/fasthttp"
 )
 

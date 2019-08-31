@@ -2,4 +2,4 @@
 API
 ====
 
-See `godoc <https://godoc.org/github.com/myzhan/boomer>`_.
+See `godoc <https://godoc.org/github.com/djeeno/boomer>`_.

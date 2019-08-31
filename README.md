@@ -1,4 +1,4 @@
-# boomer [![Build Status](https://travis-ci.org/myzhan/boomer.svg?branch=master)](https://travis-ci.org/myzhan/boomer) [![Go Report Card](https://goreportcard.com/badge/github.com/myzhan/boomer)](https://goreportcard.com/report/github.com/myzhan/boomer) [![Coverage Status](https://codecov.io/gh/myzhan/boomer/branch/master/graph/badge.svg)](https://codecov.io/gh/myzhan/boomer) [![Documentation Status](https://readthedocs.org/projects/boomer/badge/?version=latest)](https://boomer.readthedocs.io/en/latest/?badge=latest)
+# boomer [![Build Status](https://travis-ci.org/myzhan/boomer.svg?branch=master)](https://travis-ci.org/myzhan/boomer) [![Go Report Card](https://goreportcard.com/badge/github.com/djeeno/boomer)](https://goreportcard.com/report/github.com/djeeno/boomer) [![Coverage Status](https://codecov.io/gh/myzhan/boomer/branch/master/graph/badge.svg)](https://codecov.io/gh/myzhan/boomer) [![Documentation Status](https://readthedocs.org/projects/boomer/badge/?version=latest)](https://boomer.readthedocs.io/en/latest/?badge=latest)
 
 ## Links
 
@@ -17,7 +17,7 @@ Use it as a library, not a general-purpose benchmarking tool.
 ## Install
 
 ```bash
-go get github.com/myzhan/boomer
+go get github.com/djeeno/boomer
 ```
 
 ### Build
@@ -46,7 +46,7 @@ This is a example of boomer's API. You can find more in the "examples" directory
 package main
 
 import "time"
-import "github.com/myzhan/boomer"
+import "github.com/djeeno/boomer"
 
 func foo(){
     start := time.Now()
