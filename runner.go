@@ -311,6 +311,7 @@ func (r *slaveRunner) onHatchMessage(msg *message) {
 	r.client.sendChannel() <- newMessage("hatching", nil, r.nodeID)
 	rate, _ := msg.Data["hatch_rate"]
 	clients, _ := msg.Data["num_clients"]
+	log.Printf("DEBUG: hatch rate of this slave: %#v, number of clients of this slave: %#v", rate, clients)
 	hatchRate := int(rate.(float64))
 	workers := 0
 	if _, ok := clients.(uint64); ok {
@@ -321,14 +322,17 @@ func (r *slaveRunner) onHatchMessage(msg *message) {
 	if workers == 0 || hatchRate == 0 {
 		log.Printf("Invalid hatch message from master, num_clients is %d, hatch_rate is %d\n",
 			workers, hatchRate)
-	} else {
-		Events.Publish("boomer:hatch", workers, hatchRate)
-
-		if r.rateLimitEnabled {
-			r.rateLimiter.Start()
-		}
-		r.startHatching(workers, hatchRate, r.hatchComplete)
+		log.Printf("WARN: set default value: num_clients=1, hatch_rate=1")
+		workers = 1
+		hatchRate = 1
 	}
+
+	Events.Publish("boomer:hatch", workers, hatchRate)
+
+	if r.rateLimitEnabled {
+		r.rateLimiter.Start()
+	}
+	r.startHatching(workers, hatchRate, r.hatchComplete)
 }
 
 // Runner acts as a state machine.
