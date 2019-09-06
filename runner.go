@@ -144,30 +144,43 @@ func (r *runner) spawnWorkers(spawnCount int, quit chan bool, hatchCompleteFunc 
 			select {
 			case <-quit:
 				// quit hatching goroutine
+				r.safeRun(task.StopFn)
 				return
 			default:
 				atomic.AddInt32(&r.numClients, 1)
-				go func(fn func()) {
+				time.Sleep(time.Duration((1/r.hatchRate)*1000000000) * time.Nanosecond)
+				go func(self *runner, t *Task) {
+					hatched := false
 					for {
 						select {
 						case <-quit:
+							r.safeRun(task.StopFn)
 							return
 						default:
 							if r.rateLimitEnabled {
 								blocked := r.rateLimiter.Acquire()
 								if !blocked {
-									r.safeRun(fn)
+									if r.state == stateHatching && !hatched {
+										r.safeRun(t.HatchingFn)
+										hatched = true
+									}
+									r.safeRun(t.Fn)
 								}
 							} else {
-								r.safeRun(fn)
+								if r.state == stateHatching && !hatched {
+									r.safeRun(t.HatchingFn)
+									hatched = true
+								}
+								r.safeRun(t.Fn)
 							}
 						}
 					}
-				}(task.Fn)
+				}(r, task)
 			}
 		}
 	}
 
+	time.Sleep(1 * time.Second)
 	if hatchCompleteFunc != nil {
 		hatchCompleteFunc()
 	}
@@ -320,9 +333,7 @@ func (r *slaveRunner) onHatchMessage(msg *message) {
 		workers = int(clients.(int64))
 	}
 	if workers == 0 || hatchRate == 0 {
-		log.Printf("Invalid hatch message from master, num_clients is %d, hatch_rate is %d\n",
-			workers, hatchRate)
-		log.Printf("WARN: set default value: num_clients=1, hatch_rate=1")
+		log.Printf("WARN: Invalid hatch message from master, num_clients=%d, hatch_rate=%d. start with default values: num_clients=1, hatch_rate=1\n", workers, hatchRate)
 		workers = 1
 		hatchRate = 1
 	}
