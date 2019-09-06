@@ -10,4 +10,7 @@ type Task struct {
 	// Fn is called by the goroutines allocated to this task, in a loop.
 	Fn   func()
 	Name string
+	// patch
+	StopFn     func()
+	HatchingFn func()
 }

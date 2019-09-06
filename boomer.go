@@ -271,7 +271,7 @@ func Run(tasks ...*Task) {
 	})
 
 	c := make(chan os.Signal)
-	signal.Notify(c, syscall.SIGINT, syscall.SIGTERM)
+	signal.Notify(c, syscall.SIGINT, syscall.SIGTERM, syscall.SIGKILL, syscall.SIGSTOP)
 
 	select {
 	case <-c:
